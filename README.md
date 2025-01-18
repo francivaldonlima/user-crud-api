@@ -1,6 +1,6 @@
 # User CRUD API - NestJS com Prisma
 
-API de cadastro de usuários desenvolvida com NestJS, Prisma ORM e MySQL com a ajuda da inteligensia artificial claude.ai.
+API de cadastro de usuários desenvolvida com NestJS, Prisma ORM e MySQL com a ajuda da inteligência artificial claude.ai.
 
 ## Requisitos
 
