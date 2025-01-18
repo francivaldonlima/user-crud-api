@@ -1,99 +1,159 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# User CRUD API - NestJS com Prisma
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+API de cadastro de usuários desenvolvida com NestJS, Prisma ORM e MySQL.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Requisitos
 
-## Description
+- Node.js
+- MySQL
+- Git
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Instalação e Configuração
 
-## Project setup
-
+1. **Criar o projeto**
 ```bash
-$ npm install
+# Instalar NestJS CLI globalmente
+npm i -g @nestjs/cli
+
+# Criar novo projeto
+nest new user-crud-api
+
+# Entrar na pasta do projeto
+cd user-crud-api
 ```
 
-## Compile and run the project
-
+2. **Instalar dependências**
 ```bash
-# development
-$ npm run start
+# Instalar Prisma e seu cliente
+npm install @prisma/client prisma
 
-# watch mode
-$ npm run start:dev
+# Instalar dependências para validação
+npm install class-validator class-transformer
 
-# production mode
-$ npm run start:prod
+# Instalar tipos mapeados do NestJS
+npm install @nestjs/mapped-types
+
+# Instalar bcrypt para hash de senha
+npm install bcrypt
+npm install -D @types/bcrypt
 ```
 
-## Run tests
-
+3. **Configurar Prisma**
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+# Inicializar Prisma
+npx prisma init
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g mau
-$ mau deploy
+4. **Configurar banco de dados**
+Crie um arquivo `.env` na raiz do projeto:
+```env
+DATABASE_URL="mysql://user:password@localhost:3306/user_crud_db"
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+5. **Configurar schema do Prisma**
+No arquivo `prisma/schema.prisma`:
+```prisma
+generator client {
+  provider = "prisma-client-js"
+}
 
-## Resources
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
 
-Check out a few resources that may come in handy when working with NestJS:
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+6. **Criar as tabelas**
+```bash
+# Criar primeira migração
+npx prisma migrate dev --name init
+```
 
-## Support
+7. **Iniciar a aplicação**
+```bash
+# Modo desenvolvimento
+npm run start:dev
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## Enviando para o GitHub
 
-## Stay in touch
+1. **Inicializar repositório Git**
+```bash
+# Inicializar Git
+git init
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+# Adicionar arquivos
+git add .
 
-## License
+# Criar primeiro commit
+git commit -m "first commit"
+```
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+2. **Criar arquivo .gitignore**
+```
+# Dependências
+node_modules
+dist
+
+# Ambiente
+.env
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# IDE
+.idea
+.vscode
+
+# Sistema operacional
+.DS_Store
+```
+
+3. **Conectar e enviar para GitHub**
+```bash
+# Adicionar repositório remoto (substitua USER/REPO pelo seu usuário/repositório)
+git remote add origin https://github.com/USER/REPO.git
+
+# Enviar código para GitHub
+git branch -M main
+git push -u origin main
+```
+
+## Endpoints da API
+
+- `POST /users` - Criar usuário
+- `GET /users` - Listar usuários
+- `GET /users/:id` - Buscar um usuário
+- `PATCH /users/:id` - Atualizar usuário
+- `DELETE /users/:id` - Deletar usuário
+
+## Exemplo de requisição
+
+Criar usuário:
+```json
+POST /users
+{
+    "name": "João Silva",
+    "email": "joao@email.com",
+    "password": "123456"
+}
+```
+
+## Contribuindo
+
+1. Faça um Fork do projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
